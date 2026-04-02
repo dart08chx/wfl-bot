@@ -8,14 +8,19 @@ const client = new Client({
     ]
 });
 
-const WFL_CHANNEL_ID = '1488846094950731856';
+// The two channels where the bot will react to "wfl"
+const WFL_CHANNEL_IDS = [
+    '1488846094950731856',
+    '1330295353228001410'
+];
 
 client.once('clientReady', async () => {
-    console.log(`✅ WFL Reaction Bot is online`);
+    console.log(`✅ WFL Reaction Bot is online and watching ${WFL_CHANNEL_IDS.length} channels`);
 });
 
 client.on('messageCreate', async message => {
-    if (message.channel.id !== WFL_CHANNEL_ID) return;
+    // Only work in the two allowed channels
+    if (!WFL_CHANNEL_IDS.includes(message.channel.id)) return;
     if (message.author.bot) return;
 
     const content = message.content.toLowerCase();
@@ -25,7 +30,7 @@ client.on('messageCreate', async message => {
             await message.react('🇼');  // W
             await message.react('🇫');  // F
             await message.react('🇱');  // L
-            console.log(`Reacted WFL to message from ${message.author.tag}`);
+            console.log(`✅ Reacted W F L to message in channel ${message.channel.id}`);
         } catch (err) {
             console.error('Failed to add reactions:', err.message);
         }
